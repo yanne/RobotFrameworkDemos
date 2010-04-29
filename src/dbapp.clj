@@ -23,14 +23,14 @@
         userlist (JList.)]
     (.addActionListener submit-button (store-action username-input userlist))
     (doto frame
-      (.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)
       (.setLayout (GridLayout. 2 2 3 3))
       (.add username-label)
       (.add username-input)
       (.add submit-button)
       (.add userlist)
-      (.setSize 300 80)
-      (.setVisible true))))
+      (.setSize 300 300)
+      (.setVisible true))
+    frame))
 
 (defn -main [& args]
-    (sut))
+    (.setDefaultCloseOperation (sut) JFrame/EXIT_ON_CLOSE))
