@@ -45,4 +45,5 @@
     frame))
 
 (defn -main [& args]
-    (.setDefaultCloseOperation (sut) JFrame/EXIT_ON_CLOSE))
+  (init-users)
+  (.setDefaultCloseOperation (sut) JFrame/EXIT_ON_CLOSE))
