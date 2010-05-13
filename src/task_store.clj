@@ -1,4 +1,4 @@
-(ns user-store)
+(ns task-store)
 (use 'clojure.contrib.sql)
 
 (def db {:classname "org.hsqldb.jdbcDriver"
@@ -8,13 +8,13 @@
 (defn db-action [action]
   (with-connection db (action)))
 
-(defn create-users-table []
-  (create-table :users
+(defn create-tasks-table []
+  (create-table :tasks
     [:id :int "IDENTITY" "PRIMARY KEY"]
     [:name :varchar "NOT NULL"]))
 
-(defn init-users []
-  (db-action create-users-table))
+(defn init-tasks []
+  (db-action create-tasks-table))
 
 (defn sql-query [sql]
   (with-query-results res [sql] (doall res)))
@@ -22,21 +22,21 @@
 (defn last-created-id []
   (first (vals (first (sql-query "CALL IDENTITY()")))))
 
-(defn insert-user [name]
+(defn insert-task [name]
   (transaction
-    (insert-values :users
+    (insert-values :tasks
       [:name]
       [name])
     (last-created-id)))
 
-(defn add-user [name]
-  (db-action #(insert-user name)))
+(defn add-task [name]
+  (db-action #(insert-task name)))
 
-(defn get-all-users []
-  (sql-query "select * from users"))
+(defn get-all-tasks []
+  (sql-query "select * from tasks"))
 
-(defn all-users []
-  (db-action get-all-users))
+(defn all-tasks []
+  (db-action get-all-tasks))
 
-(defn delete-user [name]
-  (db-action #(delete-rows :users [(str "name='" name "'")])))
+(defn delete-task [name]
+  (db-action #(delete-rows :tasks [(str "name='" name "'")])))
