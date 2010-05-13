@@ -40,7 +40,7 @@
     (.addActionListener btn (task-finished-action tasklist))
     btn))
 
-(defn sut []
+(defn todo-list-app []
   (let [frame (JFrame. "TODO List")
         tasklist (JList.)]
     (doto frame
@@ -55,4 +55,4 @@
 
 (defn -main [& args]
   (init-tasks)
-  (.setDefaultCloseOperation (sut) JFrame/EXIT_ON_CLOSE))
+  (.setDefaultCloseOperation (todo-list-app) JFrame/EXIT_ON_CLOSE))
