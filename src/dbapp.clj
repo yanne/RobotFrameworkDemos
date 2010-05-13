@@ -15,32 +15,35 @@
         (add-task task)
         (refresh-tasklist tasklist)))))
 
-(defn del-action [task-input tasklist]
+(defn del-action [tasklist]
   (proxy [ActionListener] []
     (actionPerformed [evt]
       (let [task (.getSelectedValue tasklist)]
         (delete-task task)
         (refresh-tasklist tasklist)))))
 
-(defn sut []
-  (let [frame (JFrame. "TODO List")
-        name-panel (JPanel.)
-        task-input (JTextField. 20)
+(defn input-panel [tasklist]
+  (let [panel (JPanel.)
         task-label (JLabel. "Task: ")
-        submit-button (JButton. "Add Task")
-        delete-button (JButton. "Task Finished")
-        tasklist-label (JLabel. "Tasks")
-        tasklist (JList.)]
+        task-input (JTextField. 20)
+        submit-button (JButton. "Add Task")]
     (.addActionListener submit-button (store-action task-input tasklist))
-    (.addActionListener delete-button (del-action task-input tasklist))
-    (doto name-panel
-      (.setLayout (BoxLayout. name-panel BoxLayout/X_AXIS))
+    (doto panel
+      (.setLayout (BoxLayout. panel BoxLayout/X_AXIS))
       (.add task-label)
       (.add task-input)
       (.add submit-button))
+  panel))
+
+(defn sut []
+  (let [frame (JFrame. "TODO List")
+        delete-button (JButton. "Task Finished")
+        tasklist-label (JLabel. "Tasks")
+        tasklist (JList.)]
+    (.addActionListener delete-button (del-action tasklist))
     (doto frame
       (.setLayout (BorderLayout.))
-      (.add name-panel BorderLayout/NORTH)
+      (.add (input-panel tasklist) BorderLayout/NORTH)
       (.add tasklist BorderLayout/CENTER)
       (.add delete-button BorderLayout/SOUTH)
       (.setSize 400 300)
