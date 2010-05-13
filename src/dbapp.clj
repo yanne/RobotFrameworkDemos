@@ -15,7 +15,7 @@
         (add-task task)
         (refresh-tasklist tasklist)))))
 
-(defn del-action [tasklist]
+(defn task-finished-action [tasklist]
   (proxy [ActionListener] []
     (actionPerformed [evt]
       (let [task (.getSelectedValue tasklist)]
@@ -35,16 +35,19 @@
       (.add submit-button))
   panel))
 
+(defn finished-button [tasklist]
+  (let [btn (JButton. "Task Finished")]
+    (.addActionListener btn (task-finished-action tasklist))
+    btn))
+
 (defn sut []
   (let [frame (JFrame. "TODO List")
-        delete-button (JButton. "Task Finished")
         tasklist (JList.)]
-    (.addActionListener delete-button (del-action tasklist))
     (doto frame
       (.setLayout (BorderLayout.))
       (.add (input-panel tasklist) BorderLayout/NORTH)
       (.add tasklist BorderLayout/CENTER)
-      (.add delete-button BorderLayout/SOUTH)
+      (.add (finished-button tasklist) BorderLayout/SOUTH)
       (.setSize 400 300)
       (.setVisible true))
     (refresh-tasklist tasklist)
