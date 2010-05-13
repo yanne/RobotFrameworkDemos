@@ -38,7 +38,6 @@
 (defn sut []
   (let [frame (JFrame. "TODO List")
         delete-button (JButton. "Task Finished")
-        tasklist-label (JLabel. "Tasks")
         tasklist (JList.)]
     (.addActionListener delete-button (del-action tasklist))
     (doto frame
