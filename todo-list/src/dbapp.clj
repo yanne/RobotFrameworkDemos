@@ -28,6 +28,10 @@
         task-input (JTextField. 20)
         submit-button (JButton. "Add Task")]
     (.addActionListener submit-button (store-action task-input tasklist))
+    (doto task-input
+      (.setName "task-name"))
+    (doto submit-button
+      (.setName "add-task"))
     (doto panel
       (.setLayout (BoxLayout. panel BoxLayout/X_AXIS))
       (.add task-label)
@@ -43,6 +47,8 @@
 (defn todo-list-app []
   (let [frame (JFrame. "TODO List")
         tasklist (JList.)]
+    (doto tasklist
+      (.setName "task-list"))
     (doto frame
       (.setLayout (BorderLayout.))
       (.add (input-panel tasklist) BorderLayout/NORTH)
