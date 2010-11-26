@@ -1,5 +1,5 @@
 (defproject dbapp "0.1"
-  :dependencies [[org.clojure/clojure "1.2.0-master-SNAPSHOT"]
-                 [org.clojure/clojure-contrib "1.2.0-SNAPSHOT"]
+  :dependencies [[org.clojure/clojure "1.2.0"]
+                 [org.clojure/clojure-contrib "1.2.0"]
                  [hsqldb/hsqldb "1.8.0.10"]]
   :main dbapp)
