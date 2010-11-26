@@ -1,4 +1,4 @@
-(ns dbapp
+(ns TodoApplication
     (:gen-class))
 (use 'task-store)
 (import '(javax.swing JFrame JLabel JTextField JButton JList JPanel BoxLayout)
