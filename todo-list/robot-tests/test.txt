@@ -1,0 +1,30 @@
+*** Settings ***
+Library  org.robot.database.keywords.DatabaseLibrary
+Library  SwingLibrary
+Suite Setup  Start Test Application
+
+*** Variables ***
+${APP TITLE}  TODO List
+${VALID TASK NAME}  New task
+
+*** Test Cases ***
+Test
+    Add New Task  ${VALID TASK NAME}
+    Verify Task Exists  ${VALID TASK NAME}
+
+*** Keywords ***
+Start Test Application
+    Start Application  TodoApplication
+    Connect To Database  org.hsqldb.jdbcDriver  jdbc:hsqldb:mem:testdb  SA  \  
+    Select Window  ${APP TITLE}
+    ${comps}=  List Components in Context
+
+Add New Task  [Arguments]  ${taskname}
+    Insert Into Textfield  task-name  ${taskname}
+    Push Button  add-task
+
+Verify Task Exists  [Arguments]  ${expected name}
+    Select From List  task-list  0
+    ${actual name}=  Get Selected Value From List  task-list
+    Should Be Equal  ${expected name}  ${actual name}
+    
