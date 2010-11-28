@@ -5,15 +5,13 @@
         '(java.awt.event ActionListener)
         '(java.awt BorderLayout))
 
+(defmacro on-action [component event & body]
+  `(. ~component addActionListener
+     (proxy [java.awt.event.ActionListener] []
+       (actionPerformed [~event] ~@body))))
+
 (defn refresh-tasklist [tasklist]
   (.setListData tasklist (to-array (map #(:name %) (all-tasks)))))
-
-(defn store-action [task-input tasklist]
-  (proxy [ActionListener] []
-    (actionPerformed [evt]
-      (let [task (.getText task-input)]
-        (add-task task)
-        (refresh-tasklist tasklist)))))
 
 (defn task-finished-action [tasklist]
   (proxy [ActionListener] []
@@ -22,21 +20,26 @@
         (delete-task task)
         (refresh-tasklist tasklist)))))
 
+(defn submit-button [tasklist input-field]
+  (doto (JButton. "add task")
+    (.setName "add-task")
+    (on-action evt
+      (add-task (.getText input-field))
+      (refresh-tasklist tasklist))))
+
+(defn textfield [name size]
+  (doto (JTextField. size)
+    (.setName name)))
+
 (defn input-panel [tasklist]
   (let [panel (JPanel.)
         task-label (JLabel. "Task: ")
-        task-input (JTextField. 20)
-        submit-button (JButton. "Add Task")]
-    (.addActionListener submit-button (store-action task-input tasklist))
-    (doto task-input
-      (.setName "task-name"))
-    (doto submit-button
-      (.setName "add-task"))
+        task-input (textfield "task-name" 20)]
     (doto panel
       (.setLayout (BoxLayout. panel BoxLayout/X_AXIS))
       (.add task-label)
       (.add task-input)
-      (.add submit-button))
+      (.add (submit-button tasklist task-input)))
   panel))
 
 (defn finished-button [tasklist]
