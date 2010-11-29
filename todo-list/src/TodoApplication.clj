@@ -5,7 +5,7 @@
         '(java.awt.event ActionListener)
         '(java.awt BorderLayout))
 
-(defmacro on-action [component event & body]
+(defmacro with-action [component event & body]
   `(. ~component addActionListener
      (proxy [java.awt.event.ActionListener] []
        (actionPerformed [~event] ~@body))))
@@ -23,7 +23,7 @@
 (defn submit-button [tasklist input-field]
   (doto (JButton. "add task")
     (.setName "add-task")
-    (on-action evt
+    (with-action evt
       (add-task (.getText input-field))
       (refresh-tasklist tasklist))))
 
