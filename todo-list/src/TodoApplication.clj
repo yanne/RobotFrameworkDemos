@@ -13,13 +13,6 @@
 (defn refresh-tasklist [tasklist]
   (.setListData tasklist (to-array (map #(:name %) (all-tasks)))))
 
-(defn task-finished-action [tasklist]
-  (proxy [ActionListener] []
-    (actionPerformed [evt]
-      (let [task (.getSelectedValue tasklist)]
-        (delete-task task)
-        (refresh-tasklist tasklist)))))
-
 (defn submit-button [tasklist input-field]
   (doto (JButton. "add task")
     (.setName "add-task")
@@ -33,19 +26,20 @@
 
 (defn input-panel [tasklist]
   (let [panel (JPanel.)
-        task-label (JLabel. "Task: ")
         task-input (textfield "task-name" 20)]
     (doto panel
       (.setLayout (BoxLayout. panel BoxLayout/X_AXIS))
-      (.add task-label)
+      (.add (JLabel. "Task: "))
       (.add task-input)
       (.add (submit-button tasklist task-input)))
   panel))
 
 (defn finished-button [tasklist]
-  (let [btn (JButton. "Task Finished")]
-    (.addActionListener btn (task-finished-action tasklist))
-    btn))
+  (doto (JButton. "Task Finished")
+    (.setName "finsih-task")
+    (with-action evt
+      (delete-task (.getSelectedValue tasklist))
+      (refresh-tasklist tasklist))))
 
 (defn todo-list-app []
   (let [frame (JFrame. "TODO List")
