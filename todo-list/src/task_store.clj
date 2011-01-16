@@ -13,7 +13,7 @@
     [:id :int "IDENTITY" "PRIMARY KEY"]
     [:name :varchar "NOT NULL"]))
 
-(defn init-tasks []
+(defn init[]
   (db-action create-tasks-table))
 
 (defn sql-query [sql]
